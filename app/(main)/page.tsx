@@ -107,22 +107,8 @@ export default function Home() {
 
   return (
     <main className="mt-12 flex w-full flex-1 flex-col items-center px-4 text-center sm:mt-1">
-      <a
-        className="mb-4 inline-flex h-7 shrink-0 items-center gap-[9px] futuristic-container px-7 py-5"
-        href="https://ai.google.dev/gemini-api/docs"
-        target="_blank"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
-        </span>
-        <span className="text-sm">
-          Powered by <span className="font-medium text-[var(--primary-gold)]">Gemini API</span>
-        </span>
-      </a>
-      <h1 className="my-6 max-w-3xl text-4xl font-bold text-[var(--primary-gold)] sm:text-6xl">
-        Turn your <span className="text-[var(--secondary-gold)]">Vizion</span>
-        <br /> into an <span className="text-[var(--secondary-gold)]">app</span>
+      <h1 className="mb-8 text-xl text-[var(--secondary-gold)]">
+        An AI Coding Assistant - Powered by Google Gemini
       </h1>
 
       <form className="w-full max-w-xl" onSubmit={createApp}>
