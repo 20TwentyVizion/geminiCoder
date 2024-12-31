@@ -5,27 +5,18 @@ import Header from "@/components/Header";
 
 export default function Layout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <body className="bg-brand antialiased">
-      {/* Commenting out the halo image for now */}
-      {/* <div className="absolute inset-x-0 flex justify-center">
-        <Image
-          src={bgImg}
-          alt=""
-          className="w-full max-w-[1200px] mix-blend-screen"
-          priority
-        />
-      </div> */}
-
-      <div className="isolate">
-        <div className="mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center py-2">
-          <Header />
+      <div className="fixed inset-0 -z-10 bg-[url('/background.jpg')] bg-cover bg-center bg-no-repeat opacity-30" />
+      <div className="relative flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">
           {children}
-          <Footer />
-        </div>
+        </main>
+        <Footer />
       </div>
     </body>
   );

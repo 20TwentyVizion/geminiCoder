@@ -108,24 +108,28 @@ export default function Home() {
   return (
     <main className="mt-12 flex w-full flex-1 flex-col items-center px-4 text-center sm:mt-1">
       <a
-        className="mb-4 inline-flex h-7 shrink-0 items-center gap-[9px] rounded-[50px] border-[0.5px] border-solid border-[#E6E6E6] bg-[rgba(234,238,255,0.65)] bg-gray-100 px-7 py-5 shadow-[0px_1px_1px_0px_rgba(0,0,0,0.25)]"
+        className="mb-4 inline-flex h-7 shrink-0 items-center gap-[9px] futuristic-container px-7 py-5"
         href="https://ai.google.dev/gemini-api/docs"
         target="_blank"
       >
-        <span className="text-center">
-          Powered by <span className="font-medium">Gemini API</span>
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+        </span>
+        <span className="text-sm">
+          Powered by <span className="font-medium text-[var(--primary-gold)]">Gemini API</span>
         </span>
       </a>
-      <h1 className="my-6 max-w-3xl text-4xl font-bold text-white sm:text-6xl">
-        Turn your <span className="text-blue-400">Vizion</span>
-        <br /> into an <span className="text-blue-400">app</span>
+      <h1 className="my-6 max-w-3xl text-4xl font-bold text-[var(--primary-gold)] sm:text-6xl">
+        Turn your <span className="text-[var(--secondary-gold)]">Vizion</span>
+        <br /> into an <span className="text-[var(--secondary-gold)]">app</span>
       </h1>
 
       <form className="w-full max-w-xl" onSubmit={createApp}>
         <fieldset disabled={loading} className="disabled:opacity-75">
           <div className="relative mt-5">
-            <div className="absolute -inset-2 rounded-[32px] bg-gray-300/50" />
-            <div className="relative flex rounded-3xl bg-white shadow-sm">
+            <div className="absolute -inset-2 rounded-[32px] bg-[var(--primary-gold)]/10" />
+            <div className="relative flex rounded-3xl bg-[var(--dark-surface)] border border-[var(--primary-gold)] shadow-sm">
               <div className="relative flex flex-grow items-stretch focus-within:z-10">
                 <textarea
                   rows={3}
@@ -133,17 +137,17 @@ export default function Home() {
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   name="prompt"
-                  className="w-full resize-none rounded-l-3xl bg-transparent px-6 py-5 text-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
+                  className="w-full resize-none rounded-l-3xl bg-transparent px-6 py-5 text-lg text-[var(--primary-gold)] placeholder-[var(--secondary-gold)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--primary-gold)]"
                   placeholder="Build me a calculator app..."
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-3xl px-3 py-2 text-sm font-semibold text-blue-500 hover:text-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 disabled:text-gray-900"
+                className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-3xl px-3 py-2 text-sm font-semibold text-[var(--primary-gold)] hover:text-[var(--secondary-gold)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--primary-gold)] disabled:text-gray-500"
               >
                 {status === "creating" ? (
-                  <LoadingDots color="#000" style="small" />
+                  <LoadingDots color="#FFD700" style="small" />
                 ) : (
                   <ArrowLongRightIcon className="-ml-0.5 size-6" />
                 )}
