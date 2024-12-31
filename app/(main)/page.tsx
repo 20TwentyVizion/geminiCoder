@@ -107,9 +107,14 @@ export default function Home() {
 
   return (
     <main className="mt-12 flex w-full flex-1 flex-col items-center px-4 text-center sm:mt-1">
-      <h1 className="mb-8 text-xl text-[var(--secondary-gold)]">
+      <h1 className="mb-4 text-xl text-[var(--secondary-gold)]">
         An AI Coding Assistant - Powered by Google Gemini
       </h1>
+      
+      <p className="mb-8 max-w-2xl text-sm text-[var(--secondary-gold)]/80">
+        Currently in alpha, this tool generates code based on a single prompt. Interactive code editing and modifications are planned for future updates. 
+        Best suited for basic projects like calculators, todo lists, simple web layouts, and basic UI components.
+      </p>
 
       <form className="w-full max-w-xl" onSubmit={createApp}>
         <fieldset disabled={loading} className="disabled:opacity-75">
@@ -124,7 +129,7 @@ export default function Home() {
                   onChange={(e) => setPrompt(e.target.value)}
                   name="prompt"
                   className="w-full resize-none rounded-l-3xl bg-transparent px-6 py-5 text-lg text-[var(--primary-gold)] placeholder-[var(--secondary-gold)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--primary-gold)]"
-                  placeholder="Build me a calculator app..."
+                  placeholder="What would you like me to build?"
                 />
               </div>
               <button
