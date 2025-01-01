@@ -1,11 +1,17 @@
 "use client";
 
+import React from "react";
 import * as shadcnComponents from "@/utils/shadcn";
-import { Sandpack, SandpackFiles } from "@codesandbox/sandpack-react";
-import {
+import { 
+  Sandpack, 
+  SandpackFiles, 
+  SandpackProvider, 
   SandpackPreview,
-  SandpackProvider,
-} from "@codesandbox/sandpack-react/unstyled";
+  SandpackCodeEditor,
+  SandpackLayout,
+  useActiveCode,
+  useSandpack
+} from "@codesandbox/sandpack-react";
 import { dracula as draculaTheme } from "@codesandbox/sandpack-themes";
 import dedent from "dedent";
 import "./code-viewer.css";
@@ -61,35 +67,43 @@ const sharedFiles = {
   `,
 };
 
+function CodeEditorWithChangeHandler({ onCodeChange }: { onCodeChange?: (code: string) => void }) {
+  const { code } = useActiveCode();
+
+  React.useEffect(() => {
+    if (onCodeChange) {
+      onCodeChange(code);
+    }
+  }, [code, onCodeChange]);
+
+  return <SandpackCodeEditor />;
+}
+
 export default function CodeViewer({
   code,
   showEditor = false,
   onCodeChange,
 }: CodeViewerProps) {
-  const handleFileChange = (files: SandpackFiles) => {
-    if (onCodeChange && files["/App.tsx"]) {
-      onCodeChange(files["/App.tsx"].code);
-    }
-  };
-
   return showEditor ? (
-    <Sandpack
-      options={{
-        showNavigator: true,
-        editorHeight: "80vh",
-        showTabs: false,
-        ...sharedOptions,
-      }}
+    <SandpackProvider
+      template="react-ts"
+      theme={draculaTheme}
       files={{
         "/App.tsx": code,
         ...sharedFiles,
       }}
-      {...sharedProps}
-      filesSyncData={{
-        subscribeOnFileChange: true,
+      options={{
+        ...sharedOptions,
+        showNavigator: true,
+        showTabs: false,
       }}
-      onFileChange={handleFileChange}
-    />
+      {...sharedProps}
+    >
+      <SandpackLayout>
+        <CodeEditorWithChangeHandler onCodeChange={onCodeChange} />
+        <SandpackPreview />
+      </SandpackLayout>
+    </SandpackProvider>
   ) : (
     <SandpackProvider
       files={{
