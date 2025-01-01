@@ -3,14 +3,11 @@
 import React from "react";
 import * as shadcnComponents from "@/utils/shadcn";
 import { 
-  Sandpack, 
-  SandpackFiles, 
   SandpackProvider, 
   SandpackPreview,
   SandpackCodeEditor,
   SandpackLayout,
   useActiveCode,
-  useSandpack,
   SandpackPredefinedTemplate
 } from "@codesandbox/sandpack-react";
 import { dracula as draculaTheme } from "@codesandbox/sandpack-themes";
@@ -31,17 +28,14 @@ const sharedOptions = {
   editorWidthPercentage: 60,
 };
 
-const sharedProps = {
-  template: TEMPLATE,
-  customSetup: {
-    dependencies: {
-      "@radix-ui/react-icons": "^1.3.0",
-      "@radix-ui/themes": "^2.0.0",
-      "@radix-ui/react-slot": "^1.0.2",
-      "class-variance-authority": "^0.7.0",
-      "tailwind-merge": "^2.0.0",
-      "clsx": "^2.0.0",
-    },
+const sharedSetup = {
+  dependencies: {
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/themes": "^2.0.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "tailwind-merge": "^2.0.0",
+    "clsx": "^2.0.0",
   },
 };
 
@@ -100,7 +94,7 @@ export default function CodeViewer({
         showNavigator: true,
         showTabs: false,
       }}
-      {...sharedProps}
+      customSetup={sharedSetup}
     >
       <SandpackLayout>
         <CodeEditorWithChangeHandler onCodeChange={onCodeChange} />
@@ -110,13 +104,14 @@ export default function CodeViewer({
   ) : (
     <SandpackProvider
       template={TEMPLATE}
+      theme={draculaTheme}
       files={{
         "/App.tsx": code,
         ...sharedFiles,
       }}
       className="flex h-full w-full grow flex-col justify-center"
-      options={{ ...sharedOptions }}
-      {...sharedProps}
+      options={sharedOptions}
+      customSetup={sharedSetup}
     >
       <SandpackPreview
         className="flex h-full w-full grow flex-col justify-center p-4 md:pt-16"
