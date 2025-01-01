@@ -10,13 +10,17 @@ import { dracula as draculaTheme } from "@codesandbox/sandpack-themes";
 import dedent from "dedent";
 import "./code-viewer.css";
 
+interface CodeViewerProps {
+  code: string;
+  showEditor?: boolean;
+  onCodeChange?: (newCode: string) => void;
+}
+
 export default function CodeViewer({
   code,
   showEditor = false,
-}: {
-  code: string;
-  showEditor?: boolean;
-}) {
+  onCodeChange,
+}: CodeViewerProps) {
   return showEditor ? (
     <Sandpack
       options={{
@@ -30,6 +34,11 @@ export default function CodeViewer({
         ...sharedFiles,
       }}
       {...sharedProps}
+      onChange={(files) => {
+        if (onCodeChange) {
+          onCodeChange(files["App.tsx"].code);
+        }
+      }}
     />
   ) : (
     <SandpackProvider
