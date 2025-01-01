@@ -10,7 +10,8 @@ import {
   SandpackCodeEditor,
   SandpackLayout,
   useActiveCode,
-  useSandpack
+  useSandpack,
+  SandpackPredefinedTemplate
 } from "@codesandbox/sandpack-react";
 import { dracula as draculaTheme } from "@codesandbox/sandpack-themes";
 import dedent from "dedent";
@@ -22,6 +23,8 @@ interface CodeViewerProps {
   onCodeChange?: (newCode: string) => void;
 }
 
+const TEMPLATE: SandpackPredefinedTemplate = "react-ts";
+
 const sharedOptions = {
   theme: draculaTheme,
   resizablePanels: true,
@@ -29,7 +32,7 @@ const sharedOptions = {
 };
 
 const sharedProps = {
-  template: "react-ts",
+  template: TEMPLATE,
   customSetup: {
     dependencies: {
       "@radix-ui/react-icons": "^1.3.0",
@@ -86,7 +89,7 @@ export default function CodeViewer({
 }: CodeViewerProps) {
   return showEditor ? (
     <SandpackProvider
-      template="react-ts"
+      template={TEMPLATE}
       theme={draculaTheme}
       files={{
         "/App.tsx": code,
@@ -106,6 +109,7 @@ export default function CodeViewer({
     </SandpackProvider>
   ) : (
     <SandpackProvider
+      template={TEMPLATE}
       files={{
         "/App.tsx": code,
         ...sharedFiles,
