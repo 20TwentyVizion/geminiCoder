@@ -8,11 +8,38 @@ datasource db {
 }
 
 model GeneratedApp {
-  id        String   @id @default(nanoid(5))
-  model     String
-  prompt    String
-  code      String
-  createdAt DateTime @default(now())
+  id          String         @id @default(nanoid(5))
+  model       String
+  prompt      String
+  code        String
+  createdAt   DateTime       @default(now())
+  iterations  CodeIteration[]
 
   @@index([id])
+}
+
+model CodeIteration {
+  id            String       @id @default(nanoid(5))
+  generatedAppId String
+  generatedApp   GeneratedApp @relation(fields: [generatedAppId], references: [id])
+  code          String
+  prompt        String
+  model         String
+  timestamp     DateTime     @default(now())
+  feedback      Feedback?
+  shadcn        Boolean      @default(false)
+
+  @@index([generatedAppId])
+}
+
+model Feedback {
+  id          String        @id @default(nanoid(5))
+  iterationId String        @unique
+  iteration   CodeIteration @relation(fields: [iterationId], references: [id])
+  rating      Int
+  comments    String?
+  tags        String[]
+  createdAt   DateTime      @default(now())
+
+  @@index([iterationId])
 }
