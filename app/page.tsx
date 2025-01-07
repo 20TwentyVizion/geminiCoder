@@ -2,10 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { App as ChatbotApp } from "../ext/Modular Chatbot MVP/src/App";
-import { MessageService } from "../ext/Modular Chatbot MVP/src/services/message/messageService";
-import { Message } from "../ext/Modular Chatbot MVP/src/types";
-import { ChatbotSettings } from "../ext/Modular Chatbot MVP/src/types/settings";
+import { App as ChatbotApp } from "@/components/chatbot/App";
+import { Message } from "@/components/chatbot/types";
+import { ChatbotSettings } from "@/components/chatbot/types/settings";
 
 export default function Home() {
   const router = useRouter();
@@ -49,8 +48,13 @@ export default function Home() {
         router.push(`/coder?prompt=${encodeURIComponent(prompt)}`);
       }, 1500);
     } else {
-      // Handle normal chat messages
-      await MessageService.handleMessage(content, settings, addMessage);
+      // Add default response for non-build messages
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        content: "I'm your coding assistant. Start your message with 'Build me a' to create something! For example: 'Build me a todo list app with dark mode'",
+        sender: "bot",
+        timestamp: new Date().toISOString(),
+      });
     }
   };
 
