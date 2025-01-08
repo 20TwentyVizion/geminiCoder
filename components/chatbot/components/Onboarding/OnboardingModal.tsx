@@ -23,7 +23,7 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
           </h2>
           
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Let's get started by setting up your profile. What should I call you?
+            Let&apos;s get started by setting up your profile. What should I call you?
           </p>
           
           <div className="space-y-4">
