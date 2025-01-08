@@ -57,7 +57,7 @@ export default function CoderPage() {
     if (searchParams.get("prompt")) {
       createApp(new Event("submit") as any);
     }
-  }, []);
+  }, [searchParams, createApp]);
 
   async function createApp(e: any) {
     e.preventDefault();

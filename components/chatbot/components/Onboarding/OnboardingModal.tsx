@@ -36,9 +36,9 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
-                className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 
+                className={`mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 
                          bg-white dark:bg-gray-700 px-3 py-2 text-gray-900 dark:text-white 
-                         focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                         focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500`}
                 required
               />
             </div>
