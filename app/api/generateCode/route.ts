@@ -7,58 +7,82 @@ const apiKey = process.env.GOOGLE_AI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function POST(req: Request) {
-  let json = await req.json();
-  let result = z
-    .object({
-      model: z.string(),
-      shadcn: z.boolean().default(false),
-      messages: z.array(
-        z.object({
-          role: z.enum(["user", "assistant"]),
-          content: z.string(),
-        }),
-      ),
-    })
-    .safeParse(json);
+  try {
+    if (!apiKey) {
+      return new Response("Google AI API key is not configured", { status: 500 });
+    }
 
-  if (result.error) {
-    return new Response(result.error.message, { status: 422 });
+    let json = await req.json();
+    let result = z
+      .object({
+        model: z.string(),
+        shadcn: z.boolean().default(false),
+        messages: z.array(
+          z.object({
+            role: z.enum(["user", "assistant"]),
+            content: z.string(),
+          }),
+        ),
+      })
+      .safeParse(json);
+
+    if (result.error) {
+      return new Response(result.error.message, { status: 422 });
+    }
+
+    let { model, messages, shadcn } = result.data;
+    let systemPrompt = getSystemPrompt(shadcn);
+
+    try {
+      const geminiModel = genAI.getGenerativeModel({ model: model });
+
+      // Convert messages to Gemini format and add system prompt
+      const history = messages.slice(0, -1).map(msg => ({
+        role: msg.role === "user" ? "user" : "model",
+        parts: [{ text: msg.content }],
+      }));
+
+      const chat = geminiModel.startChat({
+        history,
+        generationConfig: {
+          maxOutputTokens: 4000,
+        },
+      });
+
+      const lastMessage = messages[messages.length - 1].content;
+      const prompt = lastMessage + systemPrompt + "\nPlease ONLY return code, NO backticks or language names. Don't start with \`\`\`typescript or \`\`\`javascript or \`\`\`tsx or \`\`\`.";
+
+      const geminiStream = await chat.sendMessageStream(prompt);
+
+      const readableStream = new ReadableStream({
+        async start(controller) {
+          try {
+            for await (const chunk of geminiStream.stream) {
+              const chunkText = chunk.text();
+              controller.enqueue(new TextEncoder().encode(chunkText));
+            }
+            controller.close();
+          } catch (error) {
+            controller.error(error);
+          }
+        },
+      });
+
+      return new Response(readableStream);
+    } catch (error) {
+      console.error("Gemini API error:", error);
+      return new Response(
+        error instanceof Error ? error.message : "Failed to generate code",
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    console.error("Server error:", error);
+    return new Response(
+      error instanceof Error ? error.message : "Internal server error",
+      { status: 500 }
+    );
   }
-
-  let { model, messages, shadcn } = result.data;
-  let systemPrompt = getSystemPrompt(shadcn);
-
-  const geminiModel = genAI.getGenerativeModel({ model: model });
-
-  // Convert messages to Gemini format and add system prompt
-  const history = messages.slice(0, -1).map(msg => ({
-    role: msg.role === "user" ? "user" : "model",
-    parts: [{ text: msg.content }],
-  }));
-
-  const chat = geminiModel.startChat({
-    history,
-    generationConfig: {
-      maxOutputTokens: 4000,
-    },
-  });
-
-  const lastMessage = messages[messages.length - 1].content;
-  const prompt = lastMessage + systemPrompt + "\nPlease ONLY return code, NO backticks or language names. Don't start with \`\`\`typescript or \`\`\`javascript or \`\`\`tsx or \`\`\`.";
-
-  const geminiStream = await chat.sendMessageStream(prompt);
-
-  const readableStream = new ReadableStream({
-    async start(controller) {
-      for await (const chunk of geminiStream.stream) {
-        const chunkText = chunk.text();
-        controller.enqueue(new TextEncoder().encode(chunkText));
-      }
-      controller.close();
-    },
-  });
-
-  return new Response(readableStream);
 }
 
 function getSystemPrompt(shadcn: boolean) {

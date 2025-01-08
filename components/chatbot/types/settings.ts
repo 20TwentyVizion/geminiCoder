@@ -2,32 +2,73 @@ import { Voice } from './index';
 
 export interface ChatbotSettings {
   profile: {
-    name: string;
+    userName: string;
     botName: string;
-    birthday?: string | null;
-  };
-  theme: {
-    mode: 'light' | 'dark';
-    wallpaper: string;
+    birthday?: string;
+    interests: string[];
+    preferredLanguages: string[];
+    experienceLevel: 'beginner' | 'intermediate' | 'advanced';
+    theme: 'light' | 'dark';
+    notifications: boolean;
   };
   voice: {
     enabled: boolean;
-    voice: Voice | null;
+    language: string;
+  };
+  interface: {
+    fontSize: 'small' | 'medium' | 'large';
+    codeTheme: 'default' | 'monokai' | 'github';
+    showLineNumbers: boolean;
+    compactMode: boolean;
   };
 }
 
 export const defaultSettings: ChatbotSettings = {
   profile: {
-    name: '',
-    botName: 'VizionCoder Assistant',
-    birthday: null,
-  },
-  theme: {
-    mode: 'dark',
-    wallpaper: '',
+    userName: '',
+    botName: 'VizionCoder',
+    interests: [],
+    preferredLanguages: ['JavaScript', 'TypeScript'],
+    experienceLevel: 'intermediate',
+    theme: 'dark',
+    notifications: true,
   },
   voice: {
     enabled: false,
-    voice: null,
+    language: 'en-US',
+  },
+  interface: {
+    fontSize: 'medium',
+    codeTheme: 'default',
+    showLineNumbers: true,
+    compactMode: false,
   },
 };
+
+export const programmingLanguages = [
+  'JavaScript',
+  'TypeScript',
+  'Python',
+  'Java',
+  'C++',
+  'C#',
+  'Ruby',
+  'Go',
+  'Rust',
+  'PHP',
+  'Swift',
+  'Kotlin',
+];
+
+export const interestCategories = [
+  'Web Development',
+  'Mobile Development',
+  'Data Science',
+  'Machine Learning',
+  'DevOps',
+  'Cloud Computing',
+  'Game Development',
+  'Blockchain',
+  'Cybersecurity',
+  'UI/UX Design',
+];

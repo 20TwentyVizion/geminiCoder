@@ -5,14 +5,32 @@
 :root {
   --primary-gold: #FFD700;
   --secondary-gold: #B8860B;
-  --dark-bg: #000000;
-  --dark-surface: #111111;
+}
+
+.dark {
+  --dark-bg: rgba(30, 35, 48, 0.85);
+  --dark-surface: rgba(43, 50, 69, 0.9);
+  color-scheme: dark;
 }
 
 body {
+  min-height: 100vh;
+  background-image: url('https://cdn.leonardo.ai/users/6cd4ea3f-13be-4f8f-8b23-66cb07a2d68b/generations/977da1f7-bbdf-4181-afac-b006bebd26eb/85c46e1a-5a32-46c0-8c54-115ac55ec398.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.dark body {
   background: var(--dark-bg);
   color: var(--primary-gold);
-  min-height: 100vh;
+}
+
+/* Add semi-transparent overlay for better text readability */
+.content-overlay {
+  background: var(--dark-bg);
+  backdrop-filter: blur(8px);
 }
 
 .bg-brand {

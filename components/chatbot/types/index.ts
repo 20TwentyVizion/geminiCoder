@@ -1,8 +1,8 @@
 export interface Message {
   id: string;
   content: string;
-  sender: 'user' | 'bot';
-  timestamp: string;
+  role: "user" | "assistant";
+  createdAt: string;
 }
 
 export interface Voice {

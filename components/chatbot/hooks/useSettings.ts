@@ -8,23 +8,27 @@ export const useSettings = (initialSettings?: ChatbotSettings) => {
 
   useEffect(() => {
     if (!initialSettings) {
-      const savedSettings = localStorage.getItem('chatbot_settings');
+      const savedSettings = localStorage.getItem('vizionCoder.settings');
       if (savedSettings) {
-        setSettings(JSON.parse(savedSettings));
+        try {
+          setSettings(JSON.parse(savedSettings));
+        } catch (e) {
+          console.error('Failed to parse saved settings:', e);
+        }
       }
     }
   }, [initialSettings]);
 
   useEffect(() => {
     if (!initialSettings) {
-      localStorage.setItem('chatbot_settings', JSON.stringify(settings));
+      localStorage.setItem('vizionCoder.settings', JSON.stringify(settings));
     }
   }, [settings, initialSettings]);
 
   const resetSettings = () => {
     setSettings(initialSettings || defaultSettings);
     if (!initialSettings) {
-      localStorage.removeItem('chatbot_settings');
+      localStorage.removeItem('vizionCoder.settings');
     }
   };
 

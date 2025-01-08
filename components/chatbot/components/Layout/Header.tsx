@@ -1,57 +1,99 @@
-import React from 'react';
-import { Cog6ToothIcon, CalendarIcon, MicrophoneIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
+import { Cog6ToothIcon, CalendarIcon, MicrophoneIcon, CodeBracketIcon } from '@heroicons/react/24/outline';
+import { ChatbotSettings } from '../../types/settings';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
-  botName: string;
-  onSettingsClick: () => void;
-  onCalendarClick: () => void;
-  onVoiceClick: () => void;
-  isVoiceActive?: boolean;
-  isVoiceListening?: boolean;
+  settings: ChatbotSettings;
+  onOpenSettings: () => void;
+  onOpenCalendar: () => void;
+  onOpenVoice: () => void;
 }
 
 export function Header({
-  botName,
-  onSettingsClick,
-  onCalendarClick,
-  onVoiceClick,
-  isVoiceActive,
-  isVoiceListening
+  settings,
+  onOpenSettings,
+  onOpenCalendar,
+  onOpenVoice,
 }: HeaderProps) {
+  const router = useRouter();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDateTime = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    }).format(date);
+  };
+
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div className="flex items-center justify-between px-4 py-3">
+    <header className={`content-overlay rounded-t-lg ${settings.profile.theme === 'dark' ? 'dark' : ''}`}>
+      <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 rounded-full bg-green-500" />
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {botName}
-            </h1>
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {settings.profile.botName}
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {formatDateTime(currentTime)}
+              </p>
+            </div>
           </div>
         </div>
 
         <div className="flex items-center space-x-4">
           <button
-            onClick={onVoiceClick}
-            className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              isVoiceActive ? 'text-blue-500' : 'text-gray-500 dark:text-gray-400'
-            } ${isVoiceListening ? 'animate-pulse text-red-500' : ''}`}
+            onClick={() => router.push('/coder')}
+            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 
+                     hover:bg-gray-100 dark:hover:bg-gray-700 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Open Coder"
           >
-            <MicrophoneIcon className="w-5 h-5" />
+            <CodeBracketIcon className="w-6 h-6" />
           </button>
 
           <button
-            onClick={onCalendarClick}
-            className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={onOpenVoice}
+            className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500 
+                     ${settings.voice.enabled ? 'text-blue-500' : 'text-gray-500 dark:text-gray-400'}`}
+            title="Voice Control"
           >
-            <CalendarIcon className="w-5 h-5" />
+            <MicrophoneIcon className="w-6 h-6" />
           </button>
 
           <button
-            onClick={onSettingsClick}
-            className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={onOpenCalendar}
+            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 
+                     hover:bg-gray-100 dark:hover:bg-gray-700 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Calendar"
           >
-            <Cog6ToothIcon className="w-5 h-5" />
+            <CalendarIcon className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={onOpenSettings}
+            className="p-2 rounded-lg text-gray-500 dark:text-gray-400 
+                     hover:bg-gray-100 dark:hover:bg-gray-700 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+            title="Settings"
+          >
+            <Cog6ToothIcon className="w-6 h-6" />
           </button>
         </div>
       </div>
